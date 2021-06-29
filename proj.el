@@ -582,11 +582,8 @@
       (while (search-forward "#<killed buffer>" nil t)
         (replace-match "*scratch*"))
       (goto-char (point-min))
-      ;; (while (search-forward "#<buffer " nil t)
-      ;;   (replace-match "\""))
-      ;; (goto-char (point-min))
-      ;; (while (search-forward ">" nil t)
-      ;;   (replace-match "\""))
+      (while (re-search-forward "#<buffer \\(.*\\)>" nil t)
+        (replace-match "\"\\1\""))
       )
     buffer))
 
@@ -599,13 +596,12 @@
     (write-file path confirm)))
 
 (defun proj-load-info-from-file (path)
-  (ignore-errors
-    (let* ((proj-info (read-file path)))
-      (loop for (key . value) in proj-info
-            do (when value
-                 (set-frame-parameter nil key value))
-            )
-      path)))
+  (let* ((proj-info (read-file path)))
+    (loop for (key . value) in proj-info
+          do (when value
+               (set-frame-parameter nil key value))
+          )
+    path))
 
 
 (defun proj-set-name (name)
