@@ -584,6 +584,9 @@
       (goto-char (point-min))
       (while (re-search-forward "#<buffer \\(.*\\)>" nil t)
         (replace-match "\"\\1\""))
+      (goto-char (point-min))
+      (while (search-forward "(prev-buffers" nil t)
+        (replace-match "(prev-buffers--ignored "))
       )
     buffer))
 
